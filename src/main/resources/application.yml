@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:/musala/drones
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:liquibase/changelog.yml
+    default-schema: public
+    contexts: test
+
+server:
+  port: 5555
+
+springdoc:
+  swagger-ui:
+    path: /api
+  api-docs:
+    path: /api-docs
