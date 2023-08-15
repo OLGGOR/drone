@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01_create-drone-model-table
+      author: gorskikh-oi
+      changes:
+        - sqlFile:
+            path: 01_create-drone-model-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 02_create-drones-table
+      author: gorskikh-oi
+      changes:
+        - sqlFile:
+            path: 02_create-drones-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 03_create-medications-table
+      author: gorskikh-oi
+      changes:
+        - sqlFile:
+            path: 03_create-medications-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 04_create-drone-medication-table
+      author: gorskikh-oi
+      changes:
+        - sqlFile:
+            path: 04_create-drone-medication-table.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: 01_insert-drone-model-test-data
+      author: gorskikh-oi
+      context: test
+      changes:
+        - sqlFile:
+            path: test/01_insert-drone-model-test-data.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 02_insert-test-drones-data
+      author: gorskikh-oi
+      context: test
+      changes:
+        - sqlFile:
+            path: test/02_insert-test-drones-data.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 03_insert-medications-test-data
+      author: gorskikh-oi
+      context: test
+      changes:
+        - sqlFile:
+            path: test/03_insert-medications-test-data.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 04_insert-relations-test-data
+      author: gorskikh-oi
+      context: test
+      changes:
+        - sqlFile:
+            path: test/04_insert-relations-test-data.sql
+            relativeToChangelogFile: true
+
