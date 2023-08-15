@@ -1,0 +1,322 @@
+openapi: 3.0.3
+info:
+  title: Drones
+  version: 1.0.0
+externalDocs:
+  description: Service's repository
+  url: https://github.musala.com/drones
+servers:
+  - url: http://localhost:5555
+tags:
+  - name: Drones
+    description: Drones manipulations
+
+paths:
+  /drones:
+    get:
+      tags:
+        - Drones
+      summary: Getting available drones for loading
+      operationId: getAvailableDrones
+      responses:
+        200:
+          $ref: '#/components/responses/DronesResp'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Drones
+      summary: Registering a drone
+      operationId: registerDrone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDroneRequest'
+      responses:
+        '204':
+          description: Drone was successfully registered
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+
+    post:
+      tags:
+        - Drones
+      summary: Loading a drone with medication item
+      operationId: loadDrone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadDroneRequest'
+      responses:
+        '204':
+          description: The medications were successfully loaded
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+
+  /drones/battery:
+    get:
+      tags:
+        - Drones
+      summary: Getting battery level of a specific drone
+      operationId: getBatteryLevel
+      parameters:
+        - in: query
+          name: droneSerialNumber
+          required: true
+          description: Serial number of a specific drone
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        200:
+          $ref: '#/components/responses/BatteryResp'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+
+  /drones/medications:
+    get:
+      tags:
+        - Drones
+      summary: Getting all loaded medications for a given drone
+      operationId: getMedicationsByDrone
+      parameters:
+        - in: query
+          name: droneSerialNumber
+          required: true
+          description: Serial number of a specific drone
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        200:
+          $ref: '#/components/responses/MedicationsResp'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+
+
+components:
+  schemas:
+
+    MedicationDto:
+      type: object
+      properties:
+        name:
+          description: Name of the medication
+          type: string
+          pattern: ^[A-Za-z0-9](?:[A-Za-z0-9_-]*[A-Za-z0-9])?$
+        weightGr:
+          description: Weight of the medication
+          type: number
+          maximum: 150
+          minimum: 1
+        code:
+          description: Code of the medication
+          type: string
+          pattern: ^[A-Za-z0-9][A-Za-z0-9_]*[A-Za-z0-9]$
+        image:
+          $ref: '#/components/schemas/ImageDto'
+      required:
+        - name
+        - weightGr
+        - code
+        - image
+
+    DroneDto:
+      type: object
+      properties:
+        droneSerialNumber:
+          description: Serial number of the drone
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^\S+$
+        model:
+          $ref: '#/components/schemas/DroneModelDto'
+        batteryLevel:
+          description: The drone's battery level
+          readOnly: true
+          type: number
+          maximum: 100
+          minimum: 0
+        state:
+          $ref: '#/components/schemas/DroneState'
+      required:
+        - droneSerialNumber
+        - model
+        - weightLimit
+        - batteryLevel
+        - state
+
+    ImageDto:
+      type: object
+      properties:
+        content:
+          description: Base64 decoded image
+          type: string
+        contentType:
+          $ref: '#/components/schemas/ImageContentType'
+      required:
+        - content
+        - contentType
+
+    CreateDroneRequest:
+      type: object
+      properties:
+        droneSerialNumber:
+          description: Serial number of the drone
+          type: string
+          maxLength: 100
+        model:
+          $ref: '#/components/schemas/DroneModelEnum'
+      required:
+        - droneSerialNumber
+        - model
+
+    LoadDroneRequest:
+      type: object
+      properties:
+        medications:
+          type: array
+          minLength: 1
+          description: codes of the medications
+          items:
+            $ref: '#/components/schemas/LoadingMedication'
+        droneSerialNumber:
+          description: Serial number of the drone
+          type: string
+          maxLength: 100
+      required:
+        - medications
+        - droneSerialNumber
+
+    LoadingMedication:
+      type: object
+      properties:
+        medicationCode:
+          description: code of the medication
+          type: string
+          pattern: ^[A-Za-z0-9][A-Za-z0-9_]*[A-Za-z0-9]$
+        count:
+          description: count of medication
+          type: integer
+          maximum: 10
+          minimum: 1
+      required:
+        - medicationCode
+        - count
+
+    BatteryLevel:
+      type: object
+      properties:
+        level:
+          description: Battery level
+          type: number
+          maximum: 100
+          minimum: 0
+      required:
+        - level
+
+    ImageContentType:
+      description: Content type of image
+      type: string
+      enum:
+        - IMAGE_JPEG
+
+    DroneModelDto:
+      description: Model of the drone
+      type: object
+      properties:
+        weightLimit:
+          description: Limit of the cargo weight
+          type: number
+          maximum: 500
+          minimum: 10
+        model:
+          $ref: '#/components/schemas/DroneModelEnum'
+
+    DroneModelEnum:
+      description: Model of the drone
+      type: string
+      enum:
+        - LIGHTWEIGHT
+        - MIDDLEWEIGHT
+        - CRUISERWEIGHT
+        - HEAVYWEIGHT
+
+    DroneState:
+      readOnly: true
+      type: string
+      enum:
+        - IDLE
+        - LOADING
+        - LOADED
+        - DELIVERING
+        - DELIVERED
+        - RETURNING
+      default: IDLE
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        description:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+  responses:
+    InternalServerError:
+      description: Internal server error occurred
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Bad request error occurred
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    MedicationsResp:
+      description: List of medications for specific drone
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/MedicationDto'
+
+    DronesResp:
+      description: List of available drones
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/DroneDto'
+
+    BatteryResp:
+      description: Battery level
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatteryLevel'
