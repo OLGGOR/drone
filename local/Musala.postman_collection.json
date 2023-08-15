@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "b0a30680-61c3-4795-89f9-367f1fc36ccc",
+		"name": "Musala",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6746700"
+	},
+	"item": [
+		{
+			"name": "get available drones",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5555/drones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5555",
+					"path": [
+						"drones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get medications",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5555/drones/medications?droneSerialNumber=serial-number_8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5555",
+					"path": [
+						"drones",
+						"medications"
+					],
+					"query": [
+						{
+							"key": "droneSerialNumber",
+							"value": "serial-number_8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get battery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5555/drones/battery?droneSerialNumber=serial-number_10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5555",
+					"path": [
+						"drones",
+						"battery"
+					],
+					"query": [
+						{
+							"key": "droneSerialNumber",
+							"value": "serial-number_10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register drone",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"droneSerialNumber\": \"serial_number_888\",\r\n    \"model\": \"CRUISERWEIGHT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5555/drones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5555",
+					"path": [
+						"drones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "load drone",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"droneSerialNumber\": \"serial_number_888\",\r\n    \"medications\": [\r\n        {\"medicationCode\": \"med_code_1\", \"count\": 3},\r\n        {\"medicationCode\": \"med_code_4\", \"count\": 1},\r\n        {\"medicationCode\": \"med_code_3\", \"count\": 2}\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5555/drones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5555",
+					"path": [
+						"drones"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
