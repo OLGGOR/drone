@@ -1,6 +1,16 @@
 ## Drones
 
 ---
+Tech stack:
+ - Spring Boot
+ - Hibernate
+ - Liquibase
+ - MapStruct
+ - OpenApi
+ - Spring test
+
+   
+---
 
 ### Local running
 
